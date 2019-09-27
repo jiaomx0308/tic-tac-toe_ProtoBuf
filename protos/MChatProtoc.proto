@@ -1,0 +1,71 @@
+import "CommonProtoc.proto";
+package MyLib;
+
+import "google/protobuf/csharp_options.proto";
+
+option optimize_for = LITE_RUNTIME;
+option (google.protobuf.csharp_file_options).namespace = "MyLib";
+option (google.protobuf.csharp_file_options).umbrella_classname = "MChatProtoc";
+
+option java_package = "com.td.starfantasy.protocmsg";
+option java_outer_classname = "MChatProtoc";
+
+//发送聊天信息
+message CGSendChat{
+	required int32 channelId = 1;//聊天频道(0:世界频道,1:密语频道,2:队伍频道,3:公会频道,4:当前频道,5:喇叭频道)
+	required string targetName = 2;// 聊目标玩家的名字(没有为空)
+	required string content = 3;//聊天内容(到时根据需求定义格式)
+}
+message GCSendChat{
+}
+
+//查看聊天物品信息
+message CGViewChatGoods{
+	required int64 userGoodsId = 1;
+	required int32 goodsType = 2;//-1不存在,0道具类型,1装备类型,2银币,3金币,4声望币
+}
+message GCViewChatGoods{
+	optional PackEntry packEntry = 1;
+}
+
+//获取私聊展现信息
+message CGLoadMChatShowInfo{
+	required int64 targetId = 1;
+}
+message GCLoadMChatShowInfo{
+	optional int64 playerId = 1;
+	optional string playerName = 2;
+	optional Job job = 3;
+	optional int32 level = 4;
+}
+
+
+//推送聊天信息
+message GCPushChat2Client{
+	required int64 playerId = 1;//玩家ID
+	required string playerName = 2;//玩家昵称
+	required int32 playerLevel = 3;//玩家等级
+	required int32 playerJob = 4;//玩家职业
+	required int32 playerVip = 5;//玩家VIP
+	required int64 targetId = 6;//目标玩家ID
+	required int32 channel = 7;//聊天频道
+	required string chatContent = 8;//聊天内容
+}
+
+//推送公告信息
+message GCPushNotice{
+	required int32 contentIndex = 1;//内容标记(当内容在前端的时候)
+	required int32 noticeType = 2;//公告类型
+	repeated NoticeContent noticeContent = 3;//公告中要替换的属性值对象
+
+}
+message NoticeContent{
+	required string param = 1;
+}
+
+
+//推送发送通知公告
+message GCPushSendNotice{
+	required int32 noticeType = 1;
+	required string noticeContent = 2;
+}

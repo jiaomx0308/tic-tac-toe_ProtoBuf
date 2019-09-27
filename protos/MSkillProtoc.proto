@@ -1,0 +1,107 @@
+import "CommonProtoc.proto";
+package MyLib;
+
+import "google/protobuf/csharp_options.proto";
+
+option optimize_for = LITE_RUNTIME;
+option (google.protobuf.csharp_file_options).namespace = "MyLib";
+option (google.protobuf.csharp_file_options).umbrella_classname = "MSkillProtoc";
+
+option java_package = "com.td.starfantasy.protocmsg";
+option java_outer_classname = "MSkillProtoc";
+
+//加载技能面板
+message CGLoadSkillPanel{
+	optional SkillSort skillSort = 1 [default=ACTIVE_SKILL];
+}
+message GCLoadSkillPanel{
+	repeated SkillInfo skillInfos = 1;//技能信息
+	optional int32 distributed = 2;//已分配技能点数
+	optional int32 totalPoint = 3;//总技能点
+}
+enum SkillSort{
+	ACTIVE_SKILL = 0;//主动
+	PASV_SKILL = 1;//被动
+	GUILD_SKILL = 2;//公会
+	EMBLEM_SKILL = 3;//纹章
+}
+
+message SkillInfo{
+	optional int32 skillInfoId = 1;//技能ID
+	optional int32 level = 2; //技能等级
+	optional int32 pos = 3 [default=0];  //技能位置 0 为未分配位置则按照所在数组位置显示 非0则为分配位置取代未分配位置
+}
+
+//升级技能
+message CGSkillLevelUp{
+	optional int32 skillId = 1;//技能ID
+}
+message GCSkillLevelUp{
+	optional int32 skillId = 1;//技能ID
+	optional int32 level = 2;
+}
+
+//降级技能
+message CGSkillLevelDown{
+	optional int32 skillId = 1;//技能ID
+}
+message GCSkillLevelDown{
+	optional int32 skillId = 1;//技能ID
+	optional int32 level = 2;
+}
+
+//获取需要投入道具升级面板信息
+message CGLoadInjectPropsLevelUpInfo{
+	optional int32 skillId = 1;//技能ID
+}
+message GCLoadInjectPropsLevelUpInfo{
+	optional int32 haveInject = 1;//已投入个数
+}
+
+//投入升级道具
+message CGInjectPropsLevelUp{
+	optional int32 skillId = 1;//技能ID
+	optional int32 injectCount = 2;//投入个数
+}
+message GCInjectPropsLevelUp{
+	optional int32 skillId = 1;//技能ID
+	optional int32 level = 2;
+}
+
+//重置技能
+message CGResetSkillPoint{
+	optional SkillSort skillSort = 1 [default=ACTIVE_SKILL];
+}
+message GCResetSkillPoint{
+	optional SkillSort skillSort = 1 [default=ACTIVE_SKILL];
+	repeated SkillInfo skillInfos = 2;//技能信息
+}
+
+//推送角色技能CD
+message GCPushMemberSkillCD{
+	repeated CoolTime coolTimes = 1;
+}
+message CoolTime{
+	optional int32 id = 1;
+	optional int64 endTime = 2;
+}
+
+
+//推送添加BUFFER
+message GCPushUnitAddBuffer{
+	optional int32 bufferId = 1;
+	optional int32 damage = 2;//附加值,伤害量
+	optional int64 endTime = 3;//效果时间，-1时永久. 单位: 毫秒
+}
+
+//推送解锁、激活 升级技能
+message GCPushActivateSkill{
+	optional int32 skillId = 1;//技能ID
+    optional int32 level = 2; //技能等级
+}
+
+//推送技能点变化
+message GCPushSkillPoint{
+    optional int32 skillPoint = 1;//技能点数量
+}
+

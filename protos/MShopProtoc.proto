@@ -1,0 +1,24 @@
+package MyLib;
+
+import "google/protobuf/csharp_options.proto";
+
+option optimize_for = LITE_RUNTIME;
+option (google.protobuf.csharp_file_options).namespace = "MyLib";
+option (google.protobuf.csharp_file_options).umbrella_classname = "MShopProtoc";
+
+option java_package = "com.td.starfantasy.protocmsg";
+option java_outer_classname = "MShopProtoc";
+
+
+//购买商店道具
+message CGBuyShopProps{
+    optional int32 shopId = 1;
+    optional int32 npcId = 2;
+    optional int32 count = 3;
+}
+//购买成功之后Push消息给背包 同时Push Gold属性给客户端
+message GCBuyShopProps{
+}
+
+
+

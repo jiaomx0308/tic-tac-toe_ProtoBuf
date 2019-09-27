@@ -1,0 +1,57 @@
+import "CommonProtoc.proto";
+package MyLib;
+
+import "google/protobuf/csharp_options.proto";
+
+option optimize_for = LITE_RUNTIME;
+option (google.protobuf.csharp_file_options).namespace = "MyLib";
+option (google.protobuf.csharp_file_options).umbrella_classname = "MCopyProtoc";
+
+option java_package = "com.td.starfantasy.protocmsg";
+option java_outer_classname = "MCopyProtoc";
+
+
+//获取玩家副本信息
+message CGCopyInfo  {
+} 
+
+//返回玩家副本信息
+message GCCopyInfo {
+	repeated CopyInfo copyInfo = 1;
+}
+
+//所有副本信息 包括星级等细节信息
+message CopyInfo {
+	optional int32 id = 1;  //副本编号
+	optional bool isPass = 2; //是否通过
+}
+
+
+//EnterScene 进入副本场景
+//ExitScene 退出副本场景
+
+//掉落物品奖励获取
+//掉落物品拾取 超出背包限制怎么办呢?
+//背包满了则无法拾取物品
+
+//单机副本提交奖励给服务器 奖励同步
+message  CGCopyReward {
+	optional int32 silverTicket = 1; //掉落绑定银票
+	optional int32 expGain = 2; //人物经验获得
+	repeated PackEntry packEntry = 3; //掉落物品奖励
+}
+
+//服务器推送背包物品以及货币奖励
+//服务器推送等级以及经验变化
+message GCCopyReward {
+	
+}
+
+//更新当前新开放的章节和关卡
+message GCPushLevelOpen {
+	optional int32 chapter = 1;   //当前章节
+	optional int32 level = 2;   //当前完成的关卡
+	//关卡其它信息 评级等
+}
+
+

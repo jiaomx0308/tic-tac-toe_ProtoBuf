@@ -1,0 +1,237 @@
+import "CommonProtoc.proto";
+package MyLib;
+
+import "google/protobuf/csharp_options.proto";
+
+option optimize_for = LITE_RUNTIME;
+option (google.protobuf.csharp_file_options).namespace = "MyLib";
+option (google.protobuf.csharp_file_options).umbrella_classname = "MPropsProtoc";
+
+option java_package = "com.td.starfantasy.protocmsg";
+option java_outer_classname = "MPropsProtoc";
+
+//获取玩家背包信息
+message CGLoadPackInfo{
+	optional PackType packType = 1 [default=DEFAULT_PACK];//背包类型
+}
+message GCLoadPackInfo{
+	optional bool backpackAdjust = 1;//是否整理背包
+	optional PackType packType = 2;// 背包类型
+	repeated PackInfo packInfo = 3;
+}
+//背包信息
+message PackInfo{
+	optional PackEntry packEntry = 1;
+	optional int64 cdTime = 2;//冷却时间
+}
+//使用道具
+message CGUseUserProps{
+	optional int64 userPropsId = 1;//用户道具ID
+	optional int32 count = 2;//使用数量
+}
+message GCUseUserProps{
+}
+
+//出售道具
+message CGSellUserProps{
+	optional int64 userPropsId = 1;//用户道具ID
+	optional int32 goodsType = 2;//道具类型
+}
+message GCSellUserProps{
+	optional int32 baseId = 1;//道具基础ID
+	optional int32 goodsType = 2;//物品类型
+}
+
+//合并用户道具
+message CGMergeUserProps{
+	optional int64 userPropsId = 1;//用户道具ID
+	optional int64 targetPropsId = 2;
+}
+message GCMergeUserProps{
+}
+//拆分用户道具
+message CGSplitUserProps{
+	optional int64 userPropsId = 1;//用户道具ID
+	optional int32 count = 2;//数量
+}
+message GCSplitUserProps{
+}
+
+//整理背包
+message CGAutoAdjustPack{
+	optional PackType packType = 1;// 背包类型
+}
+message GCAutoAdjustPack{
+}
+
+//获取快捷栏信息
+message CGLoadShortcutsInfo{
+}
+message GCLoadShortcutsInfo{
+	repeated ShortCutInfo shortCutInfo = 1;
+}
+
+//推送技能键信息
+message GCPushShortcutsInfo {
+    repeated ShortCutInfo shortCutInfo = 1;
+}
+
+//快捷栏格子信息
+message ShortCutInfo{
+	optional int32 index = 1;
+	optional int64 indexId = 2;
+	optional int32 baseId = 3;
+	optional int32 type = 4;
+}
+
+//增加/取消快捷栏位置
+message CGModifyShortcutsInfo{
+	optional bool idAdd = 1;//true增加，false取消
+	optional ShortCutInfo shortCutInfo = 2;
+}
+message GCModifyShortcutsInfo{
+}
+
+//交换快捷栏位置
+message CGSwapShortcuts{
+	optional int32 srcIndex = 1;//源位置
+	optional int32 destIndex = 2;//目标位置
+}
+message GCSwapShortcuts{
+}
+
+//角色穿上/卸下装备
+message CGUserDressEquip{
+	optional bool dressType = 1;//穿上true,卸下false
+	optional int64 srcEquipId = 2;//要穿上或卸下的装备ID
+	optional int64 destEquipId = 3;//穿装备时要被替换的装备ID，默认0
+	optional int32 index = 4;//卸装备时要放入背包的位置，默认-1
+}
+message GCUserDressEquip{
+	optional bool isDress = 1;//为true时要读取dressEquip
+	optional PackEntry dressEquip = 2;//身上的装备
+	optional PackEntry packEquip = 3;//背包中的装备
+}
+
+//列出用户装备
+message CGListUserEquip{
+	optional PackType packType = 1;// 背包类型
+}
+message GCListUserEquip{
+	repeated PackEntry packEntry = 1;
+}
+//查询用户的装备详细信息
+message CGQueryUserEquipInfo{
+	optional int64 userEquipId = 1;
+}
+message GCQueryUserEquipInfo{
+	optional UserEquipInfo userEquipInfo = 1;
+}
+//其他属性未确定，后补
+message UserEquipInfo{
+	optional int64 id = 1;//物品自增ID
+	optional int32 baseId = 2;//基础ID
+	optional int32 goodsType = 3;//物品类型
+	optional int32 count = 4;//物品数量
+	optional int32 index = 5;//物品在背包的位置
+	optional int32 pack = 6;//所在的背包 
+	optional bool binding = 7;//绑定状态 
+	optional int32 rarity = 8;//稀有度
+	optional int64 playerId = 9;
+}
+
+//背包物品,仓库物品来往
+message CGPut2Storage{
+	optional int64 userPropsId = 1;//用户道具ID
+	optional int32 goodsType = 2;//物品类型
+	optional int64 destPropsId = 3;//目标位置物品ID
+	optional int32 destType = 4;
+	optional int32 index = 5;//目标位置
+}
+message GCPut2Storage{
+}
+
+//从仓库中取出物品到背包
+message CGCheckout4Storage{
+	optional int64 userPropsId = 1;//用户道具ID
+	optional int32 goodsType = 2;//物品类型
+	optional int64 destPropsId = 3;//目标位置物品ID
+	optional int32 destType = 4;
+	optional int32 index = 5;//目标位置
+}
+message GCCheckout4Storage{
+}
+
+//穿时装
+message CGDressCloth{
+	optional int32 fashionType = 1;
+	optional int32 equipId = 2;
+}
+message GCDressCloth{
+	optional int32 fashionType = 1;
+	optional int32 equipId = 2;
+}
+//脱下时装
+message CGTakeOffCloth{
+	optional int32 fashionType = 1;
+}
+message GCTakeOffCloth{
+	optional int32 fashionType = 1;
+}
+
+//解绑道具/装备
+message CGUnbindingGoods{
+	optional int64 userGoodsId = 1;//用户物品ID
+	optional int32 goodsType = 2;
+}
+message GCUnbindingGoods{
+}
+
+//推送用户物品数量改变
+message GCPushGoodsCountChange{
+	repeated GoodsCountChange goodsCountChange = 1;//物品变化
+}
+
+
+//物品获得/消耗 金币 
+message GoodsCountChange{
+	optional int32 type = 1;//物品类型 0-道具, 1-装备
+	optional int32 baseId = 2;//基础物品id
+	optional int32 num = 3;//数量, 说是:>0-获得   <0-失去
+}
+
+
+//推送上/下装装备栏改变
+message GCPushPlayerDressedEquipChange{
+	optional bool idAdd = 1;//true增加，false取消
+	optional PackEntry packEntry = 2;
+}
+
+//推送时装穿脱信息
+message GCPushPlayerDressInfo{
+	optional RolesShow rolesShow = 1;
+}
+
+//推送背包信息(推送背包信息(与1相同))
+message GCPushPackInfo{
+	optional bool backpackAdjust = 1;//是否整理背包
+	optional PackType packType = 2;// 背包类型
+	repeated PackInfo packInfo = 3;
+}
+
+//升级装备
+message CGLevelUpEquip {
+    optional int64 equipId = 1;
+    repeated int64 gemId = 2;
+}
+
+
+//RPC 修改背包数据 修改装备数据LevelUp推送 PushGoodsCountChange
+message GCPushEquipDataUpdate{
+    optional PackInfo packInfo = 1;
+}
+
+//升级宝石
+message CGLevelUpGem {
+    repeated int64 gemId = 1;
+}

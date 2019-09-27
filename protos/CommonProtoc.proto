@@ -1,0 +1,123 @@
+package MyLib;
+
+import "google/protobuf/csharp_options.proto";
+
+option (google.protobuf.csharp_file_options).namespace = "MyLib";
+option (google.protobuf.csharp_file_options).umbrella_classname = "CommonProtoc";
+option optimize_for = LITE_RUNTIME;
+
+option java_package = "com.td.starfantasy.protocmsg";
+option java_outer_classname = "CommonProtoc";
+
+message UnitId{
+	required int64 id = 1;//对象ID
+	required int32 type = 2;// 对象类型,0为玩家，1为怪物，2为宠物
+}
+
+message BasicData{
+	optional int32 indicate = 1;//标识类型(1.int32,2.int64,3.Bool,4.string,5.float,6.double)
+	optional int32 theInt32 = 2;
+	optional int64 theInt64 = 3;
+	optional bool theBool = 4;
+	optional string theString = 5;
+	optional float theFloat = 6;
+	optional double theDouble = 7;
+}
+
+
+message RolesAttributes{
+	optional int32 attrKey = 1;//属性KEY
+	optional BasicData basicData = 2;//属性值
+}
+message PackEntry{
+	optional int64 id = 1;//物品自增ID
+	optional int32 baseId = 2;//基础ID
+	optional int32 goodsType = 3[default = 0];//物品类型 0 道具 1 装备
+	optional int32 count = 4 [default = 0];//物品数量
+	optional int32 index = 5 [default = 0];//物品在背包的位置 0 - 24 编号
+	optional int32 pack = 6 [default = 0];//所在的背包 身上还是物品栏里面 
+    optional int32 level = 7 [default = 0]; //装备等级1-10级别 物品自己初始化
+    optional int32 extraAttack = 8 [default=0]; //额外攻击 宝石或者武器随机属性
+    optional int32 extraDefense = 9 [default=0]; //额外防御
+    optional int32 rndAttack = 10 [default=0]; //随机攻击力天赋
+    optional int32 rndDefense = 11 [default=0]; //随机防御力天赋
+}
+
+enum VipType{
+	NONE_VIP = 0;//非VIP
+	EXPERIENCE_VIP = 1;//体验VIP
+	MONTH_VIP = 2;//月VIP
+	SEASON_VIP = 3;//季VIP
+	YEAR_VIP = 4;//年VIP
+}
+
+enum ReplayState{
+	 ACCEPT = 0; //接受
+	 REFUSE = 1; //拒绝
+}
+
+enum MatchResult{
+	 DRAW = 0; //平
+	 WIN = 1; //胜
+	 LOSE = 2;//负
+}
+enum MatchState{
+	 START = 0; //开始
+	 END = 1; //结束
+}
+enum Job{
+	NOVICE = 0; //新手
+	WARRIOR = 1; //战士
+	ARMOURER = 2; //枪械师
+	ALCHEMIST = 3; //炼金术师
+	STALKER = 4; //潜杀者
+}
+
+enum EntityType {
+	CHEST = 0; //宝箱
+	DROP = 1; //掉落物品
+	TRAP = 2; //机关
+	CREEP = 3; //Moba 小兵
+}
+
+enum MoneyType{
+	SILVER_COIN = 0; //非绑银
+	SILVER_TICKET = 1; //绑定银票
+	GOLD_COIN = 2; //绑金币
+	GOLD_TICKET = 3; //绑定金票
+	REPUTATION = 4; //声望币
+}
+enum FightMode{
+	PEACE = 0; //和平模式
+	KILLING = 1; //杀戮模式
+	GUILD = 2; //和平模式
+	GOODEVIL = 3; //善恶模式
+	TEAM = 4; //组队模式
+}
+//背包类型
+enum PackType { 
+    DEFAULT_PACK = 0; //默认背包
+    STORAGE_PACK = 1; //仓库背包
+    DRESSED_PACK = 2; //已穿着的装备背包
+    GUILD_PACK = 3;//公会仓库
+    PLAYER_MAIL_ATTACHMENT = 4; //玩家邮件附件
+    PLAYER_PANEL_PACK = 5;//快捷栏位
+    SOLD_PACK = 6;//已出售可回购背包
+    AUCTION_PACK = 7;//拍卖行背包
+}
+enum MallType {
+	Hot =  0;//热卖
+	SaleOff = 1; //促销
+	Fashion = 2; //时装
+	Material = 3; //材料
+}
+message RolesShow{
+	optional int32 helmet = 1; //头盔
+	optional int32 coat = 2;//衣服
+	optional int32 trousers = 3;//裤子
+	optional int32 bracer = 4;//护腕
+	optional int32 shoes = 5;//鞋子
+	optional int32 weapon = 6;//武器
+	optional int32 cloth = 7;//服装
+	optional bool clothShow = 8;//是否隐藏时装
+}

@@ -1,0 +1,564 @@
+import "CommonProtoc.proto";
+import "MCopyProtoc.proto";
+import "MPropsProtoc.proto";
+import "MSkillProtoc.proto";
+
+package MyLib;
+
+import "google/protobuf/csharp_options.proto";
+
+option optimize_for = LITE_RUNTIME;
+option (google.protobuf.csharp_file_options).namespace = "MyLib";
+option (google.protobuf.csharp_file_options).umbrella_classname = "MPlayerProtoc";
+
+option java_package = "com.td.starfantasy.protocmsg";
+option java_outer_classname = "MPlayerProtoc";
+
+
+//获取自动注册账号
+message CGAutoRegisterAccount{
+}
+message GCAutoRegisterAccount{
+	required string username = 1;// 可注册帐号GUEST+8位
+}
+
+//注册账号
+message CGRegisterAccount {
+	required string username = 1;// 帐号
+	required string password = 2;// 密码
+}
+message GCRegisterAccount {
+}	
+
+
+//登陆账号
+message CGLoginAccount {
+	optional string username = 1;// 帐号
+	optional string password = 2;// 密码
+}
+
+message GCLoginAccount {
+	repeated RolesInfo rolesInfos = 1;//展现角色
+}
+
+message RolesInfo{
+	optional int64 playerId = 1;
+	optional string name = 2;
+	optional int32 level = 3;
+	optional Job job = 4 [default=NOVICE];
+	optional int32 createTime = 5;//创建时间
+	optional RolesShow rolesShow = 6;
+}
+
+//创建英雄
+message CGCreateCharacter{
+	required string username = 1;// 帐号
+	required string password = 2;// 密码
+	required string playerName = 3;//玩家昵称
+	required Job job = 4 [default=NOVICE];
+}
+message GCCreateCharacter{
+	repeated RolesInfo rolesInfos = 1;//展现角色
+}
+
+//删除英雄
+message CGDelCharacter{
+	required string username = 1;// 帐号
+	required string password = 2;// 密码
+	required int64 playerId = 3;// 玩家ID
+}
+message GCDelCharacter{
+	required int64 playerId = 1;// 被删除英雄ID
+}
+
+//选择英雄登陆
+message CGSelectCharacter{
+	required string username = 1;// 帐号
+	required string password = 2;// 密码
+	required int64 playerId = 3;// 玩家ID
+	required int32 branching = 4;//分线
+}
+message GCSelectCharacter{
+	required string tokenId = 1;// token
+}
+
+//获取查看英雄信息
+message CGGetCharacterInfo{
+	required int64 playerId = 1;// 玩家ID
+	repeated int32 paramKey = 2;//属性key
+}
+
+message GCGetCharacterInfo{
+	repeated RolesAttributes attributes = 1;//属性值
+}
+
+//绑定token链接正式登陆
+message CGBindingSession{
+	required string tokenId = 1;// 登陆密钥
+}
+message GCBindingSession{
+	optional int32 x = 1;
+	optional int32 y = 2;
+	optional int32 z = 3;
+	optional int32 direction = 4;
+	optional int32 mapId = 5;//普通地图基础ID
+	optional int32 dungeonBaseId = 6;//副本地图基础ID
+	optional int64 dungeonId = 7;//副本地图自增ID
+	repeated RolesAttributes attributes = 8;//属性值
+}
+
+//修改密码
+message CGModifyPassword{
+	required string sourcePassword = 1;// 源密码
+	optional string newPassword = 2;// 新密码
+}
+message GCModifyPassword{
+}
+
+//进入场景 退出副本则返回到主场景里面
+message CGEnterScene{
+	optional int32 id = 1; //场景或者副本编号
+}
+message GCEnterScene{
+	optional int32 id = 1; //场景或者副本编号
+}
+
+//玩家移动
+message CGPlayerMove{
+	required int32 x = 1;// X坐标
+	required int32 y = 2;// Y坐标
+	required int32 z = 3;// Z坐标
+}
+message GCPlayerMove{
+}
+
+//修改玩家昵称
+message CGModifyPlayerName{
+	required string newPlayerName = 1;// 新昵称
+}
+message GCModifyPlayerName{
+	required string newPlayerName = 1;// 新昵称
+}
+
+
+//获取所有分线
+message CGListBranchinges{
+}
+message GCListBranchinges{
+	repeated Branching branching = 1;
+}
+
+message Branching{
+	optional int32 line = 1;
+	optional int32 playerCount = 2;
+}
+
+//切换战斗模式
+message CGChangeFightMode{
+	optional FightMode fightMode = 1 [default=PEACE];
+}
+message GCChangeFightMode{
+	optional FightMode fightMode = 1 [default=PEACE];
+}
+// 设置玩家时装是否显示
+message CGSettingClothShow{
+	optional bool state = 1;//true为显示
+}
+message GCSettingClothShow{
+}
+
+// 保存用户新手引导步骤
+message CGSaveGuideStep{
+	optional int32 stepId = 1;
+}
+message GCSaveGuideStep{
+}
+
+// 道具复活
+message CGPropsRevive{
+	optional int64 playerPropsId = 1;//玩家道具ID
+}
+message GCPropsRevive{
+}
+
+// 传送门转场
+message CGChangeScreen4Point{
+}
+message GCChangeScreen4Point{
+	optional int32 x = 1;
+	optional int32 y = 2;
+	optional int32 z = 3;
+	optional int32 direction = 4;
+	optional int32 mapId = 5;//普通地图基础ID
+	optional int32 dungeonBaseId = 6;//副本地图基础ID
+	optional int64 dungeonId = 7;//副本地图自增ID
+}
+
+// 拾取掉落奖励 
+message CGPickUpLootReward{
+	optional int64 rewardId = 1;
+}
+message GCPickUpLootReward{
+}
+
+//拾取掉落物品
+message CGPickItem {
+    optional int32 itemId = 1;
+    optional int32 num = 2;
+}
+
+//找回密码
+message CGForgotPassword{
+	optional string playerEmail = 1;
+}
+message GCForgotPassword{
+}
+
+//通知玩家被踢下线
+message GCPushNotice2Kick{
+	optional KickCode kickCode = 1 [default=LOGIN_DUPLICATE];// 踢下线的原因
+}
+// 踢下线的原因
+enum KickCode { 
+    LOGIN_DUPLICATE = 0; //账号重复登录, 或者在其他地方上线
+    SERVER_CLOSEING = 1; //服务器即将停服
+    BLOCK_LOGIN = 2; //玩家被封禁
+    SERVER_MAINTENANCE = 3; //服务器维护中
+    VERIFY_ADULT_STATUS = 4; //需要验证防沉迷状态
+    CLIENT_EXCEPTION = 5; //客户端异常
+    DEL_PLAYER = 6; //玩家已删除
+}
+
+//推送英雄HP/MP给区域玩家
+message GCPushAttribute2Members{
+	repeated PlayerRolesAttributes playerRolesAttributes = 1;
+}
+
+message PlayerRolesAttributes{
+	optional UnitId unitId = 1;
+	repeated RolesAttributes attributes = 2;
+}
+
+//推送对象升级
+message GCPushLevelUpgrade{
+	optional UnitId unitId = 1;// 对象
+	optional int32 level = 2;
+}
+
+//推送英雄换装属性改变信息
+message GCPushAttrChange{
+	optional UnitId unitId = 1;// 对象
+	optional RolesAttributes attributes = 2;//属性值
+}
+
+//推送英雄经验变化
+message GCPushExpChange{
+	optional int32 exp = 1;// 经验
+}
+
+message ViewNpc{
+	optional UnitId unitId = 1;// 对象
+	optional string name = 2;
+	optional int32 icon = 3;
+	optional int32 cloth = 4;
+	optional int32 x = 5;
+	optional int32 y = 6;
+	optional int32 z = 7;
+}
+
+//推送英雄昵称更改
+message GCPushPlayerModifyName{
+	optional UnitId unitId = 1;// 对象
+	optional string newPlayerName = 2;// 新昵称
+}
+
+//推送上/下装角色属性发生改变
+message GCPushPlayerDressAttributeChanges{
+	optional UnitId unitId = 1;// 对象
+	repeated RolesAttributes attributes = 2;//属性值
+}
+
+//推送角色体力
+message GCPushPlayerPower{
+	optional int64 playerId = 1;
+	optional int32 power = 2;
+}
+
+//推送掉落物品
+message GCPushLootReward{
+	repeated LootWrapper lootWrapper = 1;
+}
+
+message LootWrapper{
+	optional UnitId unitId = 1;// 对象
+	optional int64 playerId = 2;//物品拥有者
+	optional int32 goodsType = 3;//掉落类型
+	optional int32 baseId = 4;
+	optional int32 amount = 5;//掉落的数量
+	optional int32 positionX = 6;
+	optional int32 positionY = 7;
+	optional int32 positionZ = 8;
+	optional int64 endTime = 9;
+	optional int64 protectTime = 10;//物品保护结束时间
+	
+}
+
+//推送掉落物品消失
+message GCPushLootRewardRemove{
+	optional UnitId unitId = 1;// 对象
+}
+
+//推送玩家切换场景导致模式切换
+message GCPushFightModeChangeWithMap{
+	optional int32 mapId = 1;
+	optional int32 fightMode = 2;//战斗模式
+}
+
+//推送角色复活信息
+message GCPushPlayerResurrect{
+	optional int32 hp = 1;
+	optional int32 mp = 2;
+	optional int32 energy = 3;
+}
+
+//推送劳作状态(采集)[0.开始,1.结束]
+message GCPushPlayerToilState{
+	optional UnitId unitId = 1;// 对象
+	optional int32 state = 2;
+}
+
+
+//记录玩家的一些游戏状态
+message KeyValue {
+    required string key = 1;
+    required string value = 2;
+}
+message ForgeKV {
+    required int32 key = 1; //装备部位ID
+    required int32 lev = 2;
+}
+
+//玩家序列化数据存储在本地服务器
+message PlayerInfo {
+    optional string username = 1; //账户用户名    
+    optional RolesInfo roles = 2; //创建的角色信息
+    optional GCCopyInfo copyInfos = 3; //副本信息 
+    required int32 gold = 4 [default=0]; // 金币
+    repeated PackInfo packInfo = 5; //背包物品  
+    optional GCLoadSkillPanel skill = 6; //玩家技能
+    required int32 exp = 7 [default=0];  
+    repeated PackInfo dressInfo = 8; // 身上的武器装备
+    repeated KeyValue gameState = 9; // 游戏进度记录
+    repeated ForgeKV ForgeLevel = 10; //打造各个装备部件的等级
+    optional int32 JingShi = 11 [default=0]; //晶石
+    optional string ServerIP = 12; //服务器IP
+}
+
+message CGGetKeyValue {
+    required string key = 1;
+}
+
+message GCGetKeyValue {
+    required string value = 1;
+}
+
+message CGSetKeyValue {
+    required KeyValue kv = 1;
+}
+
+
+message GCPushNotify {
+    optional string notify = 1; //服务器给客户端推送错误提示
+}
+
+message GCPushLevel {
+    optional int32 level = 1;// 推送等级属性
+}
+
+message CGAddProp {
+    optional int32 key = 1;            
+    optional int32 value = 2;
+}
+
+message CGSetProp {
+    optional int32 key = 1;
+    optional int32 value = 2;
+}
+
+enum Cmd{
+	Add = 0; 
+	Update = 1;
+	Remove = 2;
+}
+
+message DeviceInfo {
+	optional string platform = 1;
+	optional string device = 2;
+	optional string account_name = 3;
+	optional string did = 4;
+	optional string userName = 5;
+	optional string deviceName = 6;
+	optional string pid = 7;
+	optional string uid = 8;
+}
+
+//玩家在服务器上的状态
+enum PlayerState { 
+	NotInRoom = 0; //未进入房间
+	WaitChoose = 1; //等待选择英雄
+	AfterChoose = 2; //选择成功进入房间
+	AfterReset = 3; //等待游戏内初始化结束
+}
+
+//只用于不同客户端之间同步的玩家数据
+//*100 Position
+message AvatarInfo {
+	optional int32 Id = 1;
+	optional int32 X = 2;
+	optional int32 Y = 3;	
+	optional int32 Z = 4;
+    repeated PackInfo dressInfo = 5; // 身上的武器装备
+    optional int32 HP = 6;
+    optional int32 Level = 7;
+    optional int32 Dir = 8;
+    optional int32 TeamColor = 9;
+    optional bool isMaster = 10; //是否是房间主人
+    optional int32 NetSpeed = 11; //移动加速
+    optional int32 ThrowSpeed = 12; //投掷技能速度
+    optional int32 JumpForwardSpeed = 13; //跳跃速度
+    optional bool Changed = 14 [default=false]; // 是否修改了
+    optional string name = 15; //玩家名字
+    optional Job job = 16 [default=NOVICE];
+    optional int32 towerDir = 17;
+    optional int32 continueKilled = 18;
+    optional int32 score = 19;
+    optional SkillAction skillAction = 20;
+    optional uint64 frameID = 21;
+    optional bool lowChange = 22;
+    optional int32 deadCount = 23;
+    optional int32 secondaryAttackCount = 24;
+    optional int32 killCount = 25;
+    optional int32 speedX = 26;
+    optional int32 speedY = 27;
+    optional bool resetPos = 28;
+    optional bool isRobot = 29;
+    repeated BuffInfo buffInfo = 30;
+    optional int32 playerModelInGame = 31;
+    optional PlayerState state = 32;
+}
+
+//房间信息
+message RoomInfo {
+	optional int32 Id = 1;
+	repeated AvatarInfo players = 2;
+	optional int32 maxPlayerNum = 3;
+	optional int32 levelId= 4;
+}
+
+
+message EntityInfo {
+	optional int32 Id = 1;
+	optional int32 X = 2;
+	optional int32 Y = 3;	
+	optional int32 Z = 4;
+	optional int32 UnitId = 5;
+	optional int32 SpawnId = 6;
+	optional int32 HP = 7;
+	optional EntityType EType = 8 [default=CHEST];
+	optional int32 ItemId = 9;
+	optional int32 ItemNum = 10;
+	optional bool Changed = 11 [default=false];
+	optional int32 LifeLeft = 12;
+	optional int32 PlayerID = 13;
+	optional int32 Dir = 14;
+	optional int32 speedX = 15;
+	optional int32 TeamColor = 16;
+	optional int32 speedY = 17;
+	optional uint64 frameID = 18;
+}
+
+message PickItemAction {
+	optional int32 Id = 1;//掉落实体Id
+	optional int32 ItemId = 2;
+	optional int32 ItemNum = 3;
+	optional int32 Who = 4;
+}
+
+
+message DamageInfo {
+	optional int32 attacker = 1;
+	optional int32 enemy = 2;
+	optional int32 damage = 3;
+	optional bool isCritical = 4;
+	optional bool isStaticShoot = 5;
+	repeated int32 attackerList = 6;
+}
+
+message SkillAction {
+	optional int32 who = 1;
+	optional int32 skillId = 2;
+	optional int32 skillLevel = 3;
+	optional int32 X = 4;
+	optional int32 Y = 5;
+	optional int32 Z = 6;
+	optional int32 Dir = 7;
+	optional bool  isStaticShoot = 8;
+	optional int32 target = 9;
+	optional int32 runFrame = 10;
+}
+
+
+message BuffInfo {
+	optional int32 buffType = 1;
+	optional int32 attacker = 2;
+	optional int32 target = 3;
+	optional int32 skillId = 4;
+	optional int32 eventId = 5;
+	repeated int32 attackerPos = 6;
+	optional int32 X = 7;
+	optional int32 Y = 8;
+	optional int32 Z = 9;
+	optional int32 Dir = 10;
+	optional int32 params = 11;
+	optional int32 buffId = 12;
+}
+
+
+
+//抽象的玩家命令 用于测试等功能 后续固化相关命令和接口
+message CGPlayerCmd {
+	optional string cmd = 1;
+	optional AvatarInfo avatarInfo = 2;
+	optional DamageInfo damageInfo = 3;
+	optional SkillAction skillAction = 4;
+	optional BuffInfo	buffInfo = 5;
+	optional EntityInfo entityInfo = 6;
+	optional PickItemAction pickAction = 7;
+	optional int32 leftTime = 8;
+	optional RoomInfo roomInfo = 9;
+	optional string account = 10;
+	optional string nickname = 11;
+	optional DeviceInfo deviceInfo = 12;
+	optional uint64 frameId = 13;
+}
+
+
+//服务器推送给客户端或者广播数据
+message GCPlayerCmd {
+	optional string result = 1;
+	optional AvatarInfo avatarInfo = 2;
+	optional DamageInfo damageInfo = 3;
+	optional SkillAction skillAction = 4;
+	optional BuffInfo	buffInfo = 5;
+	optional EntityInfo entityInfo = 6;
+	optional PickItemAction pickAction = 7;
+	optional int32 leftTime = 8;
+	optional RoomInfo roomInfo = 9;
+	optional string news = 10;
+	optional int32 actorId = 11;
+	optional uint64 frameId = 12;
+	optional int32 runInFrame = 13; //命令执行的帧
+}
+
+
+
