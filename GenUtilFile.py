@@ -6,8 +6,7 @@ using System.Collections.Generic;
 using Google.ProtocolBuffers;
 
 
-namespace MyLib {
-public partial class Util {
+public partial class ProtoBufUtil {
 	public delegate IMessageLite MsgDelegate(ByteString buf); 
 	
 %s
@@ -17,15 +16,13 @@ public partial class Util {
 	};
 
 	public static IMessageLite GetMsg(int moduleId, int messageId, ByteString buf) {
-		//var module = SaveGame.saveGame.getModuleName(moduleId);
-		var msg = SaveGame.saveGame.getMethodName(moduleId, messageId);
+		var msg = AnalyProto.Instance.getMethodName(moduleId, messageId);
 		Debug.LogWarning ("modulename "+moduleId+" "+messageId+" msg "+msg);
 
 		return msgMap[msg](buf);
 	}
 }
 
-}
 '''
 
 delegateTemplate = '''
